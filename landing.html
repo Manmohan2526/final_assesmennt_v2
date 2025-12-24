@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor HTML/CSS Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">SME Question 2</p>
+      <h1>Create a Fresh HTML/CSS Project with Cursor</h1>
+      <p class="lede">Fast, minimal, and screenshot-ready. Built live in Cursor with a clean, modern layout you can capture for the assessment.</p>
+      <div class="hero__actions">
+        <a class="btn primary" href="#features">View Features</a>
+        <a class="btn ghost" href="#steps">Build Steps</a>
+      </div>
+      <div class="hero__meta">
+        <span>Zero JS</span>
+        <span>Responsive</span>
+        <span>Screenshot-ready</span>
+      </div>
+    </div>
+    <div class="hero__visual" aria-hidden="true">
+      <div class="glass">
+        <div class="badge">Live Build</div>
+        <h2>HTML + CSS</h2>
+        <p>Built in Cursor in under 5 minutes</p>
+        <div class="status ok">Status: Ready to Screenshot</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="features" class="section">
+      <div class="section__head">
+        <p class="eyebrow">Highlights</p>
+        <h2>What this mini-project shows</h2>
+        <p class="lede">Simple, readable structure you can open in the browser and capture immediately.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>Modern Layout</h3>
+          <p>Hero, feature grid, and call-to-action using only semantic HTML and CSS Grid/Flex.</p>
+        </article>
+        <article class="card">
+          <h3>Lightweight</h3>
+          <p>No JavaScript needed. External Google Font for a polished look; everything else is local.</p>
+        </article>
+        <article class="card">
+          <h3>Responsive</h3>
+          <p>Fluid grid and type scale adapt across desktop/tablet/phone for clean screenshots.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="steps" class="section section--alt">
+      <div class="section__head">
+        <p class="eyebrow">How to capture</p>
+        <h2>Quick instructions</h2>
+        <p class="lede">Open `landing.html` in your browser, adjust width if needed, and take the screenshot.</p>
+      </div>
+      <ol class="steps">
+        <li>Open `landing.html` (double-click or serve via `python -m http.server 8000`).</li>
+        <li>Resize the window to a desktop width (~1280px) for the nicest composition.</li>
+        <li>Capture a screenshot of the hero and feature grid for the submission.</li>
+      </ol>
+      <div class="cta">
+        <h3>Ready when you are</h3>
+        <p>Everything is static. No build step required.</p>
+        <a class="btn primary" href="#top">Back to top</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Cursor HTML/CSS Demo • SME Question 2 • Designed for quick capture</p>
+  </footer>
+</body>
+</html>
+
