@@ -1,42 +1,126 @@
-# Performance Optimization Demo
+# SME Question 1 – Practical Cursor Workflow (Scenario Based)
 
-Repository name: `final_assesmennt_v2`
+This branch `sme_question_1` documents, in a **theoretical / scenario-based** way, how to handle a common issue when working with Cursor:
 
-This repo demonstrates a simple before/after performance optimization suitable for GTmetrix or Pingdom screenshots. The optimized page inlines critical CSS, defers non-critical CSS, uses compressed inline media, and lazy-loads assets to reduce LCP/CLS risk.
+> **Scenario**: Cursor refuses to modify a file, or it modifies the wrong file. How do you correct it?
 
-## What changed
-- Critical CSS inlined; non-critical CSS deferred via `media="print"` swap with preload.
-- Inline SVG hero (tiny payload) with explicit dimensions to avoid CLS.
-- Lazy loading on imagery; cache-friendly hints via preload.
-- Minimal JS and small bundle surface.
+Use the steps below as if you are explaining the workflow to another engineer in an interview or evaluation. You can take screenshots of each major step in Cursor and VS Code / Git panels as evidence.
 
-## Files
-- `index.html` — optimized page with before/after notes and inline critical CSS.
-- `style.css` — non-critical styles loaded after first paint.
-- `app.js` — small helper to log load timing in the console.
+---
 
-## Suggested measurement flow
-1) Serve locally: `python -m http.server 8000` (or any static server).
-2) Expose publicly for GTmetrix/Pingdom (e.g., `ngrok http 8000`).
-3) Run GTmetrix/Pingdom twice: once before optimizations (use a copy without inline CSS/lazy assets) and once after (this repo). Capture screenshots.
+## 1. When Cursor refuses to modify a file
 
-## Example results (replace with your real runs)
-- GTmetrix  
-  - Before: Performance 78%, Structure 83%, LCP 2.9s  
-  - After: Performance 95%, Structure 96%, LCP 1.5s
-- Pingdom  
-  - Before: Grade B (84), 1.85s, Page size 1.2MB, Requests 24  
-  - After: Grade A (92), 0.98s, Page size 420KB, Requests 12
+Typical symptoms:
+- Cursor replies that it is in **ask mode** or “read-only” and cannot apply changes.
+- Cursor says the file is “outside the workspace” or “not writable”.
+- Nothing happens to the file even though the assistant claims it made changes.
 
-## How to use
-- Open `index.html` directly or via the local server to view the optimized page.
-- The page already contains the optimized variant; if you need a “before” version, duplicate the page and remove:
-  - Inline `<style>` critical CSS
-  - `preload` + deferred stylesheet pattern
-  - `loading="lazy"` and width/height on imagery
-  - Inline SVG (replace with a large JPEG/PNG)
+### 1.1. Verify mode and workspace
+1. **Check mode**: Look at the top of the chat to see if Cursor is in **Ask** mode or **Agent** mode.  
+   - If in Ask mode, **switch to Agent mode** so Cursor is allowed to run tools and edit files.
+2. **Check workspace**: Confirm the file is inside the currently opened folder/workspace in Cursor (left file tree).  
+   - If not, **open the correct folder** (e.g. `cursor_assignment` root), then re-ask Cursor to edit.
 
-## Deliverables to capture
-- Screenshots of GTmetrix/Pingdom before and after.
-- Notes on what was optimized (CSS inlining, defer, lazy load, compression).
+> **Screenshot to capture**:  
+> - Mode selector showing Ask vs Agent.  
+> - File tree showing the project root where the file lives.
+
+### 1.2. Check file path, name and casing
+1. Confirm the **exact file path** and name you want to change (e.g. `index.html` vs `Index.html`, `style.css` vs `styles.css`).
+2. In your prompt, **refer to the file explicitly** with its name and, if helpful, relative path:
+   - “Update `index.html` in the project root. Do not touch any other files.”
+
+If Cursor still won’t modify, explicitly ask:
+- “Show me the contents of `index.html` you see.”
+
+This lets you confirm Cursor is looking at the same file you are.
+
+> **Screenshot to capture**:  
+> - Editor tab with `index.html`.  
+> - Chat message where Cursor prints the file content it sees.
+
+### 1.3. Check for read-only / permission issues
+1. Make sure the file is **not read-only** on disk:
+   - On Windows: right-click file → **Properties** → uncheck “Read-only”.
+2. Ensure you have **write permissions** to the folder and it is not inside a system-protected directory.
+3. If using Git, verify the file is not locked by any external tool.
+
+After fixing permissions, ask Cursor again to apply the patch.
+
+> **Screenshot to capture**:  
+> - File properties dialog showing read/write.  
+> - Git status panel (optional).
+
+### 1.4. Fall back to manual edit guided by Cursor
+If tools are limited or disabled (for example, during a theoretical exam setting):
+1. Ask Cursor to **output the diff or full new code** as plain text.
+2. Manually copy/paste the changes into the file yourself.
+3. Use `git diff` to verify the file looks correct.
+
+> **Screenshot to capture**:  
+> - Chat where Cursor prints the updated code block.  
+> - Editor showing the pasted code.
+
+---
+
+## 2. When Cursor modifies the wrong file
+
+Typical symptoms:
+- The wrong component, page, or config file changes.
+- Git shows diffs in a different file than expected.
+
+### 2.1. Immediately inspect what changed
+1. Run `git status` / open the **Source Control** view to see which files changed.
+2. Open the changed file(s) and inspect the diff.
+
+If you see that the wrong file was edited:
+- Decide whether to **discard** those changes or **move** them to the correct file.
+
+> **Screenshot to capture**:  
+> - Git changes panel listing modified files.  
+> - Diff view highlighting unexpected file changes.
+
+### 2.2. Revert unintended changes safely
+Options:
+1. **Use editor undo**: `Ctrl+Z` in the file if the change was very recent.
+2. **Use Git**:
+   - `git restore <wrong-file>` (or “Discard changes” in the Source Control panel).
+   - If already committed: `git revert <commit-hash>` to undo that commit clearly.
+
+After reverting, confirm with `git status` that the working tree is clean.
+
+> **Screenshot to capture**:  
+> - Command palette or terminal with `git restore`.  
+> - Clean `git status` after reverting.
+
+### 2.3. Re-run the request with precise targeting
+To avoid Cursor touching the wrong file again:
+1. Be **very explicit** in the prompt:
+   - “Modify only `index.html`. Do not change any `.js` or `.css` files.”
+2. If needed, quote the **exact snippet** to change:
+   - “In `index.html`, replace this section: `<section class=\"card\">…</section>` with the version below.”
+3. Ask Cursor to **show the diff** or the full new content so you can verify before accepting.
+
+> **Screenshot to capture**:  
+> - Chat prompt showing clear file name and snippet.  
+> - Diff view of the correct file updated.
+
+---
+
+## 3. Best practices to prevent these issues
+
+- **Use branches**:  
+  Create a feature branch (like `sme_question_1`) before large AI-driven changes so you can revert easily.
+
+- **Small, iterative edits**:  
+  Ask Cursor to make one focused change at a time (e.g. “update the header styles in `index.html` only”), review, then continue.
+
+- **Always review diffs**:  
+  Treat Cursor like a pair programmer. You stay responsible for reading the diff and ensuring only the intended files changed.
+
+- **Lock or ignore sensitive files**:  
+  For configs or generated files you don’t want touched, mention explicitly:  
+  “Don’t modify `package.json` or files in `dist/`.”
+
+These principles show that you not only know how to “use” Cursor, but also how to **control** it, roll back mistakes, and keep changes auditable, which is what a performance-based hands-on evaluation is looking for.
 
