@@ -1,0 +1,5 @@
+/* Non-critical styles loaded after first paint */
+.card ul { padding-left: 1.1rem; color: #334155; }
+.card li { margin-bottom: 0.4rem; }
+.card h2 { margin-top: 0; }
+.note { color: #475569; font-size: 0.95rem; }

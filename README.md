@@ -1,41 +1,42 @@
-## Landing Page & Performance Walkthrough
+# Performance Optimization Demo
 
-This repo contains a single-page landing experience with 5–6 sections: sticky navbar, hero, solutions grid, slider, metrics, testimonials, FAQ accordion, CTA, and footer. Interactivity for the slider (auto-rotate + manual controls) and accordion is in `app.js`; all layout/theme styles are in `styles.css`.
+Repository name: `final_assesmennt_v2`
 
-### How to run locally
-- Install a simple static server if needed: `npm install -g http-server` (or use `npx http-server`).
-- Start the site: `npx http-server -p 4173 .`
-- Open `http://localhost:4173` in the browser.
+This repo demonstrates a simple before/after performance optimization suitable for GTmetrix or Pingdom screenshots. The optimized page inlines critical CSS, defers non-critical CSS, uses compressed inline media, and lazy-loads assets to reduce LCP/CLS risk.
 
-### Baseline performance capture (before optimization)
-Use any of: Chrome Lighthouse (DevTools > Lighthouse), GTmetrix, or Pingdom.
-1) Ensure the server is running (`http://localhost:4173`).
-2) Run Lighthouse in a non-headless Chrome tab (headless in this environment hit a Chrome interstitial).
-3) Save the report as HTML or JSON and take a screenshot of the scores.
+## What changed
+- Critical CSS inlined; non-critical CSS deferred via `media="print"` swap with preload.
+- Inline SVG hero (tiny payload) with explicit dimensions to avoid CLS.
+- Lazy loading on imagery; cache-friendly hints via preload.
+- Minimal JS and small bundle surface.
 
-Place your artifacts:
-- `reports/baseline-lighthouse.html` (or `.json`)
-- `screenshots/baseline.png`
+## Files
+- `index.html` — optimized page with before/after notes and inline critical CSS.
+- `style.css` — non-critical styles loaded after first paint.
+- `app.js` — small helper to log load timing in the console.
 
-### Optimization ideas applied/planned
-- Lean, single-request page (no external JS bundles; only one CSS file).
-- Efficient gradients instead of heavy images; minimal DOM depth.
-- Preconnect to Google Fonts and use a single font family.
-- Controlled animations/transitions to keep layout stable.
+## Suggested measurement flow
+1) Serve locally: `python -m http.server 8000` (or any static server).
+2) Expose publicly for GTmetrix/Pingdom (e.g., `ngrok http 8000`).
+3) Run GTmetrix/Pingdom twice: once before optimizations (use a copy without inline CSS/lazy assets) and once after (this repo). Capture screenshots.
 
-If you add further optimizations (e.g., font-display swap, inline critical CSS, image compression), re-run the same measurement and save:
-- `reports/optimized-lighthouse.html` (or `.json`)
-- `screenshots/optimized.png`
+## Example results (replace with your real runs)
+- GTmetrix  
+  - Before: Performance 78%, Structure 83%, LCP 2.9s  
+  - After: Performance 95%, Structure 96%, LCP 1.5s
+- Pingdom  
+  - Before: Grade B (84), 1.85s, Page size 1.2MB, Requests 24  
+  - After: Grade A (92), 0.98s, Page size 420KB, Requests 12
 
-### FAQ: If Cursor refuses or edits wrong files
-- Re-select the intended file/tab and restate the path + nearby code snippet.
-- Scope by selecting the exact lines to change, then re-issue the edit.
-- If it touched the wrong file, undo those edits, then re-run with explicit path.
+## How to use
+- Open `index.html` directly or via the local server to view the optimized page.
+- The page already contains the optimized variant; if you need a “before” version, duplicate the page and remove:
+  - Inline `<style>` critical CSS
+  - `preload` + deferred stylesheet pattern
+  - `loading="lazy"` and width/height on imagery
+  - Inline SVG (replace with a large JPEG/PNG)
 
-### What to capture for the final submission
-- A short screen recording or screenshots showing: running the page, pre-optimization metrics, applied optimizations, and post-optimization metrics.
-- Add the screenshot paths above, then commit and push to the `final_assesmennt_v1` branch.
-
-### Repo
-Upstream repo: https://github.com/Manmohan2526/cursor_assignment_v2
+## Deliverables to capture
+- Screenshots of GTmetrix/Pingdom before and after.
+- Notes on what was optimized (CSS inlining, defer, lazy load, compression).
 
