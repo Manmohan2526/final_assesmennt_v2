@@ -10,7 +10,7 @@ Demonstrate creating a fresh HTML/CSS page in Cursor, suitable for quick screens
 - `landing.css` — modern, responsive styling (no JS required).
 
 ## How to preview (for your screenshots)
-![task screenshot](![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![task screenshot](![alt text](https://raw.githubusercontent.com/Manmohan2526/final_assesmennt_v2/refs/heads/sme_question_2/screenshot.png)
 )
 1. Open `landing.html` directly in the browser (double-click) **or** serve locally:  
    `python -m http.server 8000` and open `http://localhost:8000/landing.html`
